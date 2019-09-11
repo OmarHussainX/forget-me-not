@@ -4,6 +4,10 @@
   "description": "simple note-taking app",
   "main": "app.js",
   "scripts": {
+    "build": "babel src -d dist",
+    "clean": "rm -rf dist/*",
+    "dev": "nodemon --exec npm run start",
+    "start": "npm run build && node dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,6 +22,11 @@
   "homepage": "https://github.com/OmarHussainX/forget-me-not#readme",
   "dependencies": {
     "express": "^4.17.1"
+  },
+  "babel": {
+    "presets": [
+      "@babel/preset-env"
+    ]
   },
   "devDependencies": {
     "@babel/cli": "^7.6.0",

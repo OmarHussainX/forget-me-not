@@ -5,7 +5,12 @@ const port = 5000
 
 // 'root' route
 app.get('/', (req, res) => {
-  res.send('Hello World')
+  res.send('Hello World...')
+})
+
+// 'about' route
+app.get('/about', (req, res) => {
+  res.send('About...')
 })
 
 app.listen(port, () => {
