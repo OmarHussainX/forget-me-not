@@ -1,0 +1,29 @@
+{
+  "name": "forget-me-not",
+  "version": "1.0.0",
+  "description": "simple note-taking app",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/OmarHussainX/forget-me-not.git"
+  },
+  "author": "Omar Hussain",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/OmarHussainX/forget-me-not/issues"
+  },
+  "homepage": "https://github.com/OmarHussainX/forget-me-not#readme",
+  "dependencies": {
+    "express": "^4.17.1"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.6.0",
+    "@babel/core": "^7.6.0",
+    "@babel/preset-env": "^7.6.0",
+    "eslint": "^6.3.0",
+    "nodemon": "^1.19.2"
+  }
+}
