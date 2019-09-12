@@ -6,7 +6,7 @@
   "scripts": {
     "build": "babel src -d dist",
     "clean": "rm -rf dist/*",
-    "dev": "nodemon --exec npm run start",
+    "dev": "nodemon --verbose --watch src --exec npm run start",
     "start": "npm run build && node dist/app.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -21,7 +21,8 @@
   },
   "homepage": "https://github.com/OmarHussainX/forget-me-not#readme",
   "dependencies": {
-    "express": "^4.17.1"
+    "express": "^4.17.1",
+    "express-handlebars": "^3.1.0"
   },
   "babel": {
     "presets": [
