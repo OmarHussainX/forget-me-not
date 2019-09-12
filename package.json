@@ -22,7 +22,8 @@
   "homepage": "https://github.com/OmarHussainX/forget-me-not#readme",
   "dependencies": {
     "express": "^4.17.1",
-    "express-handlebars": "^3.1.0"
+    "express-handlebars": "^3.1.0",
+    "mongoose": "^5.7.0"
   },
   "babel": {
     "presets": [
