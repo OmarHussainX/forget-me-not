@@ -32,9 +32,6 @@ config           0.000GB
 forgetmenot-dev  0.000GB
 local            0.000GB
 
-> show collections
-notes
-
 > use forgetmenot-dev
 switched to db forgetmenot-dev
 
