@@ -142,6 +142,15 @@ app.put('/notes/:id', (req, res) => {
 })
 
 
+// Delete note
+app.delete('/notes/:id', (req, res) => {
+  Note.deleteOne({ _id: req.params.id })
+    .then(() => {
+      res.redirect('/notes')
+    })
+})
+
+
 app.listen(port, () => {
   console.log(`Server started on port ${port}`)
 })

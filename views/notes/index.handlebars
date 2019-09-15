@@ -1,9 +1,15 @@
 {{#each notes}}
-  <div class="card card-body mb-2">
+<div class="card card-body mb-2">
+  <div class="card-body">
     <h4>{{title}}</h4>
     <p>{{details}}</p>
-    <a href="/notes/edit/{{id}}" class="btn btn-dark btn-block">Edit</a>
+    <a href="/notes/edit/{{id}}" class="btn btn-secondary mr-2">Edit</a>
+    <form class="d-inline" action="/notes/{{id}}?_method=DELETE" method="post">
+      {{!-- <input type="hidden" name="_method" value="DELETE"> --}}
+      <input type="submit" class="btn btn-danger" value="Delete">
+    </form>
   </div>
+</div>
 {{else}}
-  <p>No notes</p>
+<p>No notes</p>
 {{/each}}
