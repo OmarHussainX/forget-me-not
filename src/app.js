@@ -1,6 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const exphbs = require('express-handlebars')
+const methodOverride = require('method-override')
 const mongoose = require('mongoose')
 
 const app = express()
@@ -42,6 +43,12 @@ app.set('view engine', 'handlebars')
 // Use body-parser middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+
+
+// ------------------------------------------------------------
+// Use method-override middleware
+// override with POST having ?_method=DELETE
+app.use(methodOverride('_method'))
 
 
 // ------------------------------------------------------------
@@ -106,7 +113,7 @@ app.get('/notes/add', (req, res) => {
 })
 
 // 'Edit note' page (displays a form which, when submitted,
-// POSTs data to '/notes')
+// PUTs data to '/notes/:id' using method-override)
 app.get('/notes/edit/:id', (req, res) => {
   Note.findOne({
     _id: req.params.id
@@ -114,10 +121,26 @@ app.get('/notes/edit/:id', (req, res) => {
     .then(note => {
       res.render('notes/edit', { note: note })
     })
-    // .catch(error => {
-    //   console.log(`Error at '/notes/edit': ${error}`)
-    // })
 })
+
+// Process data from 'Edit note' form
+app.put('/notes/:id', (req, res) => {
+  // Find the note to be updated...
+  Note.findOne({
+    _id: req.params.id
+  })
+    // ...and update it, then save it to the database
+    .then(note => {
+      note.title = req.body.title
+      note.details = req.body.details
+
+      note.save()
+        .then(note => {
+          res.redirect('/notes')
+        })
+    })
+})
+
 
 app.listen(port, () => {
   console.log(`Server started on port ${port}`)
