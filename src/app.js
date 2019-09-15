@@ -1,11 +1,13 @@
-import express from 'express'
-import exphbs from 'express-handlebars'
-import mongoose from 'mongoose'
+const express = require('express')
+const bodyParser = require('body-parser')
+const exphbs = require('express-handlebars')
+const mongoose = require('mongoose')
 
 const app = express()
 const port = 5000
 
 
+// ------------------------------------------------------------
 // Use mongoose to establish DB connection,
 // logging any connection errors
 mongoose.connect('mongodb://localhost/forgetmenot-dev', {
@@ -15,6 +17,8 @@ mongoose.connect('mongodb://localhost/forgetmenot-dev', {
   .then(() => console.log('DB connection established'))
   .catch(error => console.log(`** DB connection error **: ${error}\n`))
 
+// Load Note Model
+const Note = require('./models/Note')
 
 // To handle errors after initial connection was established,
 // listen for 'error' events on the connection
@@ -26,13 +30,21 @@ db.once('open', () => {
   console.log('DB open')
 })
 
-// express-handlebars middleware
+
+// ------------------------------------------------------------
+// Use express-handlebars middleware
 // using the package's engine factory function, using the default
 // of 'main' for the name of the default template
 app.engine('handlebars', exphbs())
 app.set('view engine', 'handlebars')
 
 
+// Use body-parser middleware
+app.use(bodyParser.urlencoded({ extended: false }))
+app.use(bodyParser.json())
+
+
+// ------------------------------------------------------------
 // 'index' route
 app.get('/', (req, res) => {
   // res.send('Hello World..')
@@ -45,6 +57,42 @@ app.get('/', (req, res) => {
 // 'about' route
 app.get('/about', (req, res) => {
   res.render('about')
+})
+
+// 'Add note' form
+app.get('/notes/add', (req, res) => {
+  res.render('notes/add')
+})
+
+// Process 'Add note' form
+app.post('/notes', (req, res) => {
+  console.log(req.body)
+
+  const errors = []
+  if (!req.body.title) errors.push({ text: 'A title is required' })
+  if (!req.body.details) errors.push({ text: 'Details are required' })
+
+  // If the title or details are missing, display error prompts
+  // on the 'Add note' form...
+  if (errors.length) {
+    res.render('notes/add', {
+      errors: errors,
+      title: req.body.title,
+      details: req.body.details
+    })
+
+  // ...otherwise, save the note to the DB and display all notes
+  } else {
+    const newUser = {
+      title: req.body.title,
+      details: req.body.details
+    }
+    new Note(newUser)
+      .save()
+      .then(note => {
+        res.redirect('/notes')
+      })
+  }
 })
 
 app.listen(port, () => {
