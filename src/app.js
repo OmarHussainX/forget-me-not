@@ -2,6 +2,8 @@ const express = require('express')
 const bodyParser = require('body-parser')
 const exphbs = require('express-handlebars')
 const methodOverride = require('method-override')
+const session = require('express-session')
+const flash = require('connect-flash')
 const mongoose = require('mongoose')
 
 const app = express()
@@ -33,13 +35,43 @@ db.once('open', () => {
 
 
 // ------------------------------------------------------------
-// Use express-handlebars middleware
+// Set express' view engine
 // using the package's engine factory function, using the default
 // of 'main' for the name of the default template
 app.engine('handlebars', exphbs())
 app.set('view engine', 'handlebars')
 
 
+// ------------------------------------------------------------
+// Use express-session middleware
+// NOTE: Using default in-memory store: a new MemoryStore instance
+// The default server-side session storage, MemoryStore, is purposely not designed for a production environment. It will leak memory under most conditions, does not scale past a single process, and is meant for debugging and developing.
+// https://github.com/expressjs/session#store
+// https://stackoverflow.com/a/40396102/11245656
+app.use(session({
+  'secret': '343ji43j4n3jn4jk3n',
+  resave: false,
+  saveUninitialized: false
+}))
+
+
+// ------------------------------------------------------------
+// Use connect-flash middleware
+// The flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user. The flash is typically used in combination with redirects, ensuring that the message is available to the next page that is to be rendered
+app.use(flash())
+
+
+// ------------------------------------------------------------
+// Creating global variables
+app.use((req, res, next) => {
+  res.locals.success_msg = req.flash('success_msg')
+  res.locals.error_msg = req.flash('error_msg')
+  res.locals.error = req.flash('error')
+  next()
+})
+
+
+// ------------------------------------------------------------
 // Use body-parser middleware
 app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
@@ -101,6 +133,7 @@ app.post('/notes', (req, res) => {
     new Note(newUser)
       .save()
       .then(note => {
+        req.flash('success_msg', 'Note saved')
         res.redirect('/notes')
       })
   }
@@ -136,6 +169,7 @@ app.put('/notes/:id', (req, res) => {
 
       note.save()
         .then(note => {
+          req.flash('success_msg', 'Note updated')
           res.redirect('/notes')
         })
     })
@@ -146,6 +180,7 @@ app.put('/notes/:id', (req, res) => {
 app.delete('/notes/:id', (req, res) => {
   Note.deleteOne({ _id: req.params.id })
     .then(() => {
+      req.flash('success_msg', 'Note deleted')
       res.redirect('/notes')
     })
 })
