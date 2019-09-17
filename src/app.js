@@ -1,7 +1,7 @@
 const express = require('express')
 const bodyParser = require('body-parser')
 const path = require('path')
-const exphbs = require('express-handlebars')
+const handlebars = require('express-handlebars')
 const methodOverride = require('method-override')
 const session = require('express-session')
 const flash = require('connect-flash')
@@ -33,11 +33,20 @@ db.once('open', () => {
 
 
 // ------------------------------------------------------------
-// Set express' view engine
-// using the package's engine factory function, using the default
-// of 'main' for the name of the default template
-app.engine('handlebars', exphbs())
-app.set('view engine', 'handlebars')
+// Set express' view engine, specifying:
+// - file extension
+// - directory where layout templates reside
+// - directory where partial templates reside
+// - name of default layout templates
+// https://github.com/ericf/express-handlebars
+
+app.engine('hbs', handlebars({
+  extname: 'hbs',
+  layoutsDir: __dirname + '/../views/layouts/',
+  partialsDir: __dirname + '/../views/partials/',
+  defaultLayout: 'main'
+}))
+app.set('view engine', 'hbs')
 
 
 // ------------------------------------------------------------
@@ -60,7 +69,7 @@ app.use(flash())
 
 
 // ------------------------------------------------------------
-// Creating global variables
+// Create global variables
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg')
   res.locals.error_msg = req.flash('error_msg')
@@ -88,23 +97,14 @@ app.use(methodOverride('_method'))
 
 // ------------------------------------------------------------
 // Define routes
+app.use('/', require('./routes/index'))
 app.use('/notes', require('./routes/notes'))
 app.use('/users', require('./routes/users'))
 
 
 // ------------------------------------------------------------
-// 'index' route
-app.get('/', (req, res) => {
-  // res.send('Hello World..')
-  const title = 'Welcome'
-  res.render('index', { title: title })
-})
-
-// 'about' route
-app.get('/about', (req, res) => {
-  res.render('about')
-})
-
+// Start HTTP server
+// NOTE: slightly different syntax is needed for HTTPS servers...
 app.listen(port, () => {
   console.log(`Server started on port ${port}`)
 })

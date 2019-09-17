@@ -12,6 +12,7 @@ router.get('/', (req, res) => {
     })
 })
 
+
 // Adds a new note to the database (processes
 // submission of 'Add note' form at '/notes/add')
 router.post('/', (req, res) => {
@@ -46,11 +47,13 @@ router.post('/', (req, res) => {
   }
 })
 
+
 // 'Add note' form (displays a form which, when submitted,
 // POSTs data to '/notes')
 router.get('/add', (req, res) => {
   res.render('notes/add')
 })
+
 
 // 'Edit note' page (displays a form which, when submitted,
 // PUTs data to '/notes/:id' using method-override)
@@ -62,6 +65,7 @@ router.get('/edit/:id', (req, res) => {
       res.render('notes/edit', { note: note })
     })
 })
+
 
 // Process data from 'Edit note' form
 router.put('/:id', (req, res) => {
