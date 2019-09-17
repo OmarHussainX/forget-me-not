@@ -2,14 +2,40 @@ import { Router } from 'express'
 const router = Router()
 import Note from '../models/Note'
 
-
+/* 
 // Notes index page - lists all notes
+// See async/await version of this code below
 router.get('/', (req, res) => {
   Note.find({})
     .sort({ date: 'ascending' })
     .then(notes => {
       res.render('notes/index', { notes: notes })
     })
+})
+ */
+
+// Notes index page - lists all notes
+router.get('/', async (req, res) => {
+  const notes = await Note.find({}).sort({ date: 'ascending' })
+  res.render('notes/index', { notes: notes })
+})
+
+
+// Investigating mongoose' Model.find()
+// https://thecodebarbarian.com/how-find-works-in-mongoose
+// http://thecodebarbarian.com/using-async-await-with-mocha-express-and-mongoose
+router.get('/log', async (req, res) => {
+  const notes = await Note.find({}).sort({ date: 'ascending' })
+  console.log('notes:', notes)
+  console.log('notes type:', typeof(notes))
+  console.log(`notes instanceof Promise: ${notes instanceof Promise}`)
+
+  const notesQuery = Note.find({})
+  console.log('notesQuery:', notesQuery)
+  console.log('notesQuery type:', typeof(notesQuery))
+  console.log(`notesQuery.exec() instanceof Promise: ${notesQuery.exec() instanceof Promise}`)
+
+  res.render('notes/index', { notes: notes })
 })
 
 
