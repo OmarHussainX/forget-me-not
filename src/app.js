@@ -1,11 +1,11 @@
-const express = require('express')
-const bodyParser = require('body-parser')
-const path = require('path')
-const handlebars = require('express-handlebars')
-const methodOverride = require('method-override')
-const session = require('express-session')
-const flash = require('connect-flash')
-const mongoose = require('mongoose')
+import express from 'express'
+import bodyParser from 'body-parser'
+import path from 'path'
+import handlebars from 'express-handlebars'
+import methodOverride from 'method-override'
+import session from 'express-session'
+import flash from 'connect-flash'
+import { connect, connection } from 'mongoose'
 
 const app = express()
 const port = 5000
@@ -14,7 +14,7 @@ const port = 5000
 // ------------------------------------------------------------
 // Use mongoose to establish DB connection,
 // logging any connection errors
-mongoose.connect('mongodb://localhost/forgetmenot-dev', {
+connect('mongodb://localhost/forgetmenot-dev', {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -23,7 +23,7 @@ mongoose.connect('mongodb://localhost/forgetmenot-dev', {
 
 // To handle errors after initial connection was established,
 // listen for 'error' events on the connection
-const db = mongoose.connection
+const db = connection
 db.on('error', error => console.log(`DB error: ${error}\n`))
 
 db.once('open', () => {
@@ -97,9 +97,9 @@ app.use(methodOverride('_method'))
 
 // ------------------------------------------------------------
 // Define routes
-app.use('/', require('./routes/index'))
-app.use('/notes', require('./routes/notes'))
-app.use('/users', require('./routes/users'))
+app.use('/', require('./routes/index').default)
+app.use('/notes', require('./routes/notes').default)
+app.use('/users', require('./routes/users').default)
 
 
 // ------------------------------------------------------------

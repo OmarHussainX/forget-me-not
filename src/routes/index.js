@@ -1,5 +1,5 @@
-const express = require('express')
-const router = express.Router()
+import { Router } from 'express'
+const router = Router()
 
 
 // 'index' route
@@ -14,4 +14,4 @@ router.get('/about', (req, res) => {
 })
 
 
-module.exports = router
+export default router

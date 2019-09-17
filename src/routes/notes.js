@@ -1,6 +1,6 @@
-const express = require('express')
-const router = express.Router()
-const Note = require('../models/Note')
+import { Router } from 'express'
+const router = Router()
+import Note from '../models/Note'
 
 
 // Notes index page - lists all notes
@@ -97,4 +97,4 @@ router.delete('/:id', (req, res) => {
 })
 
 
-module.exports = router
+export default router

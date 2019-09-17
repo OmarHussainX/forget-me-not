@@ -2,10 +2,10 @@
 // re-used - it behaves like a singleton
 // https://nodejs.org/api/modules.html#modules_caching
 // https://medium.com/@lazlojuly/are-node-js-modules-singletons-764ae97519af
-const mongoose = require('mongoose')
+import { Schema, model } from 'mongoose'
 
 // Create Schema
-const NoteSchema = new mongoose.Schema({
+const NoteSchema = new Schema({
   title: {
     type: String,
     required: true
@@ -21,7 +21,7 @@ const NoteSchema = new mongoose.Schema({
 })
 
 // Compile Schema into Model and export
-module.exports = mongoose.model('Note', NoteSchema)
+export default model('Note', NoteSchema)
 
 /* --> NOTE:
 The first argument to mongoose.model() is the _singular_ name of the collection the model is for. ** Mongoose automatically looks for the plural, lowercased version of this model name. ** In this case, the model 'Note' is for the 'notes' collection in the database:
