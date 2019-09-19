@@ -15,6 +15,7 @@ const port = 5000
 // Use mongoose to establish DB connection,
 // logging any connection errors
 connect('mongodb://localhost/forgetmenot-dev', {
+  useCreateIndex: true,   //Fix "DeprecationWarning: collection.ensureIndex..."
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
@@ -107,4 +108,12 @@ app.use('/users', require('./routes/users').default)
 // NOTE: slightly different syntax is needed for HTTPS servers...
 app.listen(port, () => {
   console.log(`Server started on port ${port}`)
+})
+
+
+// https://medium.com/dailyjs/how-to-prevent-your-node-js-process-from-crashing-5d40247b8ab2
+process.on('unhandledRejection', (reason, promise) => {
+  console.log('Unhandled Rejection at:', reason.stack || reason)
+  // Recommended: send the information to sentry.io
+  // or whatever crash reporting service you use
 })

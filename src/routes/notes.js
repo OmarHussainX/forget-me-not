@@ -27,12 +27,12 @@ router.get('/', async (req, res) => {
 router.get('/log', async (req, res) => {
   const notes = await Note.find({}).sort({ date: 'ascending' })
   console.log('notes:', notes)
-  console.log('notes type:', typeof(notes))
+  console.log('notes type:', typeof (notes))
   console.log(`notes instanceof Promise: ${notes instanceof Promise}`)
 
   const notesQuery = Note.find({})
   console.log('notesQuery:', notesQuery)
-  console.log('notesQuery type:', typeof(notesQuery))
+  console.log('notesQuery type:', typeof (notesQuery))
   console.log(`notesQuery.exec() instanceof Promise: ${notesQuery.exec() instanceof Promise}`)
 
   res.render('notes/index', { notes: notes })
@@ -60,11 +60,11 @@ router.post('/', (req, res) => {
 
     // ...otherwise, save the note to the DB and display all notes
   } else {
-    const newUser = {
+    const newNote = {
       title: title,
       details: details
     }
-    new Note(newUser)
+    new Note(newNote)
       .save()
       .then(note => {
         req.flash('success_msg', 'Note saved')

@@ -4,22 +4,22 @@
       <div class="card-body">
         <img class="logo" src="/img/logo.png">
         <h3 class="text-center">Register</h3>
-        <form>
+        <form action="/users/register" method="post">
           <div class="form-group">
             <label for="name">Name</label>
-            <input type="text" class="form-control" name="name" required>
+            <input type="text" class="form-control" name="name" value="{{name}}" >
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" name="email" class="form-control" required>
+            <input type="email" name="email" value="{{email}}" class="form-control" >
           </div>
           <div class="form-group">
             <label for="password">Password</label>
-            <input type="password" name="password" class="form-control" required>
+            <input type="password" name="password" value="{{password}}" class="form-control" >
           </div>
           <div class="form-group">
             <label for="password2">Confirm Password</label>
-            <input type="password" name="password2" class="form-control" required>
+            <input type="password" name="password2" value="{{password2}}" class="form-control" >
           </div>
           <button type="submit" class="btn btn-primary">Submit</button>
         </form>
