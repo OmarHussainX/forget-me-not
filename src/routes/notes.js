@@ -14,11 +14,10 @@ router.get('/', (req, res) => {
 })
  */
 
-// Notes index page - lists all notes
+// Notes index page
+// Lists all notes for the authenticated/logged in user
 router.get('/', async (req, res) => {
-  console.log(`--- req.user: ${req.user}`)
-  if (req.user) console.log(`--- req.user.id: ${req.user.id}`)
-  const notes = await Note.find({}).sort({ date: 'ascending' })
+  const notes = await Note.find({ user_id: req.user.id }).sort({ date: 'ascending' })
   res.render('notes/index', { notes: notes })
 })
 
@@ -86,13 +85,22 @@ router.get('/add', (req, res) => {
 
 // 'Edit note' page (displays a form which, when submitted,
 // PUTs data to '/notes/:id' using method-override)
+// 
+// (NOTE: Ensure that the note to be edited was created by the
+// currently logged in user - not just any authenticated user!)
 router.get('/edit/:id', (req, res) => {
   Note.findOne({
     _id: req.params.id
   })
     .then(note => {
-      res.render('notes/edit', { note: note })
+      if (note.user_id.toString() !== req.user.id) {
+        req.flash('error_msg', 'Not authorised to edit this note')
+        res.redirect('/notes')
+      } else {
+        res.render('notes/edit', { note: note })
+      }
     })
+    .catch(err => console.log(`Error finding note to edit: ${err.message}`))
 })
 
 
