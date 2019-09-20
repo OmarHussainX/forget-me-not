@@ -42,7 +42,24 @@ db.once('open', () => {
 // - name of default layout templates
 // https://github.com/ericf/express-handlebars
 
+
 app.engine('hbs', handlebars({
+  helpers: {
+    debug: (optionalValue) => {
+      console.log("====================")
+      console.log("Current context:")
+      console.log(this)
+      if (optionalValue) {
+        console.log("====================")
+        console.log("Value:")
+        console.log(optionalValue)
+        console.log("====================")
+      }
+    },
+    getStringifiedJson: (value) => {
+      return JSON.stringify(value)
+    }
+  },
   extname: 'hbs',
   layoutsDir: __dirname + '/../views/layouts/',
   partialsDir: __dirname + '/../views/partials/',
@@ -65,6 +82,14 @@ app.use(session({
 
 
 // ------------------------------------------------------------
+// Use Passport middleware config
+app.use(passport.initialize())
+app.use(passport.session())   //MUST BE AFTER using express-session middleware
+import passportConfig from './config/passport'
+passportConfig(passport)
+
+
+// ------------------------------------------------------------
 // Use connect-flash middleware
 // The flash is a special area of the session used for storing messages. Messages are written to the flash and cleared after being displayed to the user. The flash is typically used in combination with redirects, ensuring that the message is available to the next page that is to be rendered
 app.use(flash())
@@ -76,7 +101,12 @@ app.use(flash())
 // error_msg    - for error messages after redirect
 // success      - for Passport when authentication succeeds
 // error        - for Passport fwhen authentication fails
-// user         - if user has been authenticated, res.locals.user will be set
+// user         - if user has been authenticated, 
+//                req.user will be assigned to res.locals.user,
+//                otherwise it will be null
+// (NOTE: 'res.locals.user' MUST be defined AFTER Passport is configured,
+// otherwise it will never see that 'req.user' has been set, and will
+// always be 'null')
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg')
   res.locals.error_msg = req.flash('error_msg')
@@ -102,14 +132,6 @@ app.use(express.static(path.join(__dirname, '../public')))
 // Use method-override middleware
 // override with POST having ?_method=DELETE
 app.use(methodOverride('_method'))
-
-
-// ------------------------------------------------------------
-// Use Passport middleware config
-app.use(passport.initialize())
-app.use(passport.session())   //MUST BE AFTER using express-session middleware
-import passportConfig from './config/passport'
-passportConfig(passport)
 
 
 // ------------------------------------------------------------
