@@ -16,6 +16,8 @@ router.get('/', (req, res) => {
 
 // Notes index page - lists all notes
 router.get('/', async (req, res) => {
+  console.log(`--- req.user: ${req.user}`)
+  if (req.user) console.log(`--- req.user.id: ${req.user.id}`)
   const notes = await Note.find({}).sort({ date: 'ascending' })
   res.render('notes/index', { notes: notes })
 })

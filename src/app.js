@@ -6,6 +6,7 @@ import methodOverride from 'method-override'
 import session from 'express-session'
 import flash from 'connect-flash'
 import { connect, connection } from 'mongoose'
+import passport from 'passport'
 
 const app = express()
 const port = 5000
@@ -70,11 +71,18 @@ app.use(flash())
 
 
 // ------------------------------------------------------------
-// Create global variables
+// Create global variables:
+// success_msg  - for success messages after redirect
+// error_msg    - for error messages after redirect
+// success      - for Passport when authentication succeeds
+// error        - for Passport fwhen authentication fails
+// user         - if user has been authenticated, res.locals.user will be set
 app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg')
   res.locals.error_msg = req.flash('error_msg')
+  res.locals.success = req.flash('success')
   res.locals.error = req.flash('error')
+  res.locals.user = req.user || null
   next()
 })
 
@@ -94,6 +102,14 @@ app.use(express.static(path.join(__dirname, '../public')))
 // Use method-override middleware
 // override with POST having ?_method=DELETE
 app.use(methodOverride('_method'))
+
+
+// ------------------------------------------------------------
+// Use Passport middleware config
+app.use(passport.initialize())
+app.use(passport.session())   //MUST BE AFTER using express-session middleware
+import passportConfig from './config/passport'
+passportConfig(passport)
 
 
 // ------------------------------------------------------------

@@ -7,13 +7,33 @@ const router = Router()
 const saltRounds = 10   // for bcrypt
 
 
-// user login
+// display user login template
 router.get('/login', (req, res) => {
   res.render('users/login')
 })
 
 
-// user registration
+// Handle user login form POST
+router.post('/login', (req, res, next) => {
+  /* 
+  Authenticate login requests using passport's 'local' strategy:
+  - on successful login redirect to list of notes
+  - on failed login redirect to login form
+  - enable the display of flash messages when redirecting (Setting the
+    failureFlash option to true instructs Passport to flash an error message using the message given by the strategy's verify callback, if any. This is often the best approach, because the verify callback can make the most accurate determination of why authentication failed.)
+  - display a flash message when authentication succeeds
+  */
+
+  passport.authenticate('local', {
+    successRedirect: '/notes',
+    failureRedirect: '/users/login',
+    failureFlash: true,
+    successFlash: 'Welcome to forget-me-not!'
+  })(req, res, next)  // immediately execute passport.authenticate()?
+})
+
+
+// display user registration form template
 router.get('/register', (req, res) => {
   res.render('users/register')
 })

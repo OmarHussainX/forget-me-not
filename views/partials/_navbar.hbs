@@ -17,12 +17,8 @@
           </li>
         </ul>
         <ul class="navbar-nav ml-auto">
-          <li class="nav-item">
-            <a href="/users/login" class="nav-link">Login</a>
-          </li>
-          <li class="nav-item">
-            <a href="/users/register" class="nav-link">Register</a>
-          </li>
+          {{!-- Only shown if a user is logged in --}}
+          {{#if user}}
           <li class="nav-item dropdown">
             <a href="#" class="nav-link
               dropdown-toggle" data-toggle="dropdown" id="navbarDropdownMenuLink">
@@ -33,6 +29,15 @@
               <a href="/notes/add" class="dropdown-item">Add note</a>
             </div>
           </li>
+          {{!-- Only shown if a user is not logged in --}}
+          {{else}}
+          <li class="nav-item">
+            <a href="/users/login" class="nav-link">Login</a>
+          </li>
+          <li class="nav-item">
+            <a href="/users/register" class="nav-link">Register</a>
+          </li>
+          {{/if}}
         </ul>
       </div>
     </div>

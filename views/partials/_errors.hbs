@@ -1,8 +1,26 @@
+{{!-- show 'error' messages set by Passport --}}
+{{#if error}}
+<div class="alert alert-warning alert-dismissible">{{error}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{{/if}}
+
+{{!-- show 'success' messages set by Passport --}}
+{{#if success}}
+<div class="alert alert-success alert-dismissible">{{success}}
+  <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+{{/if}}
+
+{{!-- show {text: '...'} messages pushed into 'errors[]' --}}
 {{#each errors}}
 <div class="alert alert-warning alert-dismissible">{{text}}
   <button type="button" class="close" data-dismiss="alert" aria-label="Close">
     <span aria-hidden="true">&times;</span>
   </button>
 </div>
-{{else}}
 {{/each}}
