@@ -2,7 +2,6 @@ import { Router } from 'express'
 import bcrypt from 'bcrypt'
 import passport from 'passport'
 import User from '../models/User'
-import { ensureAuthenticated } from '../helpers/auth'
 
 const router = Router()
 const saltRounds = 10   // for bcrypt

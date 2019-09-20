@@ -135,6 +135,22 @@ app.use(methodOverride('_method'))
 
 
 // ------------------------------------------------------------
+// Prevent ALL routes from being accessed, UNLESS public access
+// to the route is explicitly allowed (as opposed to using
+// 'ensureAuthenticated' on each route that needs to be secured)
+
+import { ensureAuthenticated } from './helpers/auth'
+
+app.all('*', function (req, res, next) {
+  const publicRoutes = ['/', '/about', '/log', '/users/login', '/users/register']
+  if (publicRoutes.includes(req.path))
+    next()
+  else
+    ensureAuthenticated(req, res, next)
+})
+
+
+// ------------------------------------------------------------
 // Define routes
 app.use('/', require('./routes/index').default)
 app.use('/notes', require('./routes/notes').default)

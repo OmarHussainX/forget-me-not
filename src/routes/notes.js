@@ -1,7 +1,6 @@
 import { Router } from 'express'
 const router = Router()
 import Note from '../models/Note'
-import { ensureAuthenticated } from '../helpers/auth'
 
 /* 
 // Notes index page - lists all notes
@@ -16,7 +15,7 @@ router.get('/', (req, res) => {
  */
 
 // Notes index page - lists all notes
-router.get('/', ensureAuthenticated, async (req, res) => {
+router.get('/', async (req, res) => {
   console.log(`--- req.user: ${req.user}`)
   if (req.user) console.log(`--- req.user.id: ${req.user.id}`)
   const notes = await Note.find({}).sort({ date: 'ascending' })
@@ -79,14 +78,14 @@ router.post('/', (req, res) => {
 
 // 'Add note' form (displays a form which, when submitted,
 // POSTs data to '/notes')
-router.get('/add', ensureAuthenticated, (req, res) => {
+router.get('/add', (req, res) => {
   res.render('notes/add')
 })
 
 
 // 'Edit note' page (displays a form which, when submitted,
 // PUTs data to '/notes/:id' using method-override)
-router.get('/edit/:id', ensureAuthenticated, (req, res) => {
+router.get('/edit/:id', (req, res) => {
   Note.findOne({
     _id: req.params.id
   })
