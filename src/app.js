@@ -142,7 +142,7 @@ app.use(methodOverride('_method'))
 import { ensureAuthenticated } from './helpers/auth'
 
 app.all('*', function (req, res, next) {
-  const publicRoutes = ['/', '/about', '/log', '/users/login', '/users/register']
+  const publicRoutes = ['/', '/about', '/notes/log', '/users/login', '/users/register']
   if (publicRoutes.includes(req.path))
     next()
   else

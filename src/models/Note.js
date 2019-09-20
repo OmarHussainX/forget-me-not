@@ -1,6 +1,13 @@
 import { Schema, model } from 'mongoose'
 
+
 // Create Schema
+// 
+// One to Many relationship between users and notes
+// Rather than storing an array fo Note references in User, it is 
+// preferable to store a User reference in each Note
+// 
+// https://docs.mongodb.com/manual/tutorial/model-referenced-one-to-many-relationships-between-documents/
 const NoteSchema = new Schema({
   title: {
     type: String,
@@ -8,6 +15,10 @@ const NoteSchema = new Schema({
   },
   details: {
     type: String,
+    required: true
+  },
+  user_id: {
+    type: Schema.ObjectId,
     required: true
   },
   date: {

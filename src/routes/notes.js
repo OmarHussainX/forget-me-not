@@ -64,7 +64,8 @@ router.post('/', (req, res) => {
   } else {
     const newNote = {
       title: title,
-      details: details
+      details: details,
+      user_id: req.user.id
     }
     new Note(newNote)
       .save()

@@ -83,13 +83,13 @@ export default (passport) => {
   Here, only the user ID is serialized to the session (keeping the amount of data stored within the session small). When subsequent requests are received, this ID is used to find the user, --> which will be restored to req.user <--
   */
   passport.serializeUser((user, done) => {
-    console.log(`serializeUser: '${user}'`)
+    console.log(`-- serializeUser`)
     done(null, user.id)
   })
 
   passport.deserializeUser((id, done) => {
     User.findById(id, (err, user) => {
-      console.log(`deserializeUser: '${user}'`)
+      console.log(`-- deserializeUser`)
       done(err, user)
     })
   })
