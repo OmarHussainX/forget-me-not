@@ -9,13 +9,13 @@ import { connect, connection } from 'mongoose'
 import passport from 'passport'
 
 const app = express()
-const port = 5000
+const { PORT, MONGO_URI } = process.env
 
 
 // ------------------------------------------------------------
 // Use mongoose to establish DB connection,
 // logging any connection errors
-connect('mongodb://localhost/forgetmenot-dev', {
+connect(MONGO_URI, {
   useCreateIndex: true,   //Fix "DeprecationWarning: collection.ensureIndex..."
   useNewUrlParser: true,
   useUnifiedTopology: true
@@ -160,8 +160,8 @@ app.use('/users', require('./routes/users').default)
 // ------------------------------------------------------------
 // Start HTTP server
 // NOTE: slightly different syntax is needed for HTTPS servers...
-app.listen(port, () => {
-  console.log(`Server started on port ${port}`)
+app.listen(PORT, () => {
+  console.log(`Server started on port ${PORT}`)
 })
 
 
