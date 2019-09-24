@@ -19,13 +19,14 @@ All endpoints of the app are protected such that 'sensitive' routes (to view, ad
 # Clone repository
 $ git clone https://github.com/OmarHussainX/forget-me-not
 
-# Enter project folder for a specific project, e.g.
+# Enter project folder
 $ cd forget-me-not
 
 # Install dependencies
 $ npm install
 
-# Create a `.env` file in the root folder, and set environment variables:
+# Create a `.env` file in the root folder,
+# and set environment variables therein:
 PORT=5000
 MONGO_URI=mongodb://path/to/your/db
 
